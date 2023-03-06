@@ -43,9 +43,9 @@ Then it can be referenced in code like this:
 />
 ```        
 
-`<CachedImage />` and `<CachedImageBackground />` internally uses the `<Image />` and `<ImageBackground />` components from *'react-native'* , so any properties that apply to the `<Image/>` can be passed into the `<CachedImage/>`.
+`<CachedImage />` internally uses the `<Image />` and `<ImageBackground />` components from *'react-native'* (`<Image />` if child components are NOT specified, `<ImageBackground />` if children ARE present), so any properties that apply to the `<Image/>`/`<ImageBackground />` can be passed into the `<CachedImage/>`.
 
-*cacheKey* is the only property that's `<CachedImage />`/`<CachedBackgroundImage />` specific. The same *cacheKey* value should always be passed for the same *source* value. This is a little bit of an extra work from application development point of view, but this is how `expo-cached-medi`a achieves its performance. If not for *cacheKey*, the component would have to use some Crypto hash, which would add computational overhead. If you are rendering lots of images in a list on a screen -- this component will achieve the best performance.
+*cacheKey* is the only property that's `<CachedImage />` specific. The same *cacheKey* value should always be passed for the same *source* value. This is a little bit of an extra work from application development point of view, but this is how `expo-cached-media` achieves its performance. If not for *cacheKey*, the component would have to use some Crypto hash, which would add computational overhead. If you are rendering lots of images in a list on a screen -- this component will achieve the best performance.
 
 ### CacheManager
 ```JavaScript
