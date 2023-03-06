@@ -7,17 +7,23 @@ export const IMAGE_CACHE_FOLDER = `${FileSystem.cacheDirectory}`
 // export const IMAGE_CACHE_FOLDER = `${FileSystem.documentDirectory}images/`
 
 const CachedImage = ({
-  source, cacheKey,
+  source: {
+    uri,
+    headers,
+    expiresIn,
+  }, 
+  cacheKey,
   placeholderContent,
-  children
+  children,
 }: {
   source: {
-    uri: string, 
-    headers: {[key: string]: any},
-    expiresIn: number
-  }, 
-  placeholderContent: React.ReactNode, 
-  children: React.ReactNode
+    uri: string;
+    headers: {[key: string]: any};
+    expiresIn: number;
+  };
+  cacheKey: string;
+  placeholderContent: React.ReactNode;
+  children: React.ReactNode;
 }) => {
   const fileURI = `${IMAGE_CACHE_FOLDER}${cacheKey}`
 
