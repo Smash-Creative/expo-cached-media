@@ -1,7 +1,7 @@
 {
-  "name": "expo-cached-image",
+  "name": "expo-cached-media",
   "version": "47.1.6",
-  "description": "Super fast cached image component for react-native applications powered by expo",
+  "description": "Super fast cached media component for react-native applications powered by expo",
   "main": "lib/index.js",
   "files": [
     "lib"
@@ -12,20 +12,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/echowaves/expo-cached-image.git"
+    "url": "git+https://github.com/ScienceArtMagic/expo-cached-media.git"
   },
   "keywords": [
     "expo",
     "react-native",
     "image",
+    "video",
+    "media",
     "cached"
   ],
-  "author": "echowaves.com",
+  "author": "ScienceArtMagic",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/echowaves/expo-cached-image/issues"
+    "url": "https://github.com/ScienceArtMagic/expo-cached-media/issues"
   },
-  "homepage": "https://github.com/echowaves/expo-cached-image#readme",
+  "homepage": "https://github.com/echowaves/expo-cached-media#readme",
   "peerDependencies": {
     "expo-file-system": "^15.0.0",
     "react": "^18.1.0",
