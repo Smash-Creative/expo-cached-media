@@ -1,16 +1,25 @@
 import React, { useEffect, useState, useRef } from "react"
 
-import { Image } from "react-native"
+import { Image, ImageBackground } from "react-native"
 import * as FileSystem from "expo-file-system"
 
-import PropTypes from "prop-types"
+export const IMAGE_CACHE_FOLDER = `${FileSystem.cacheDirectory}`
+// export const IMAGE_CACHE_FOLDER = `${FileSystem.documentDirectory}images/`
 
-import * as CONST from "./consts.js"
-
-const CachedImage = (props) => {
-  const { source, cacheKey, placeholderContent } = props
-  const { uri, headers, expiresIn } = source
-  const fileURI = `${CONST.IMAGE_CACHE_FOLDER}${cacheKey}`
+const CachedImage = ({
+  source, cacheKey,
+  placeholderContent,
+  children
+}: {
+  source: {
+    uri: string, 
+    headers: {[key: string]: any},
+    expiresIn: number
+  }, 
+  placeholderContent: React.ReactNode, 
+  children: React.ReactNode
+}) => {
+  const fileURI = `${IMAGE_CACHE_FOLDER}${cacheKey}`
 
   const [imgUri, setImgUri] = useState(fileURI)
 
@@ -70,29 +79,36 @@ const CachedImage = (props) => {
   }
   // console.log({placeholderContent})
   if (!imgUri) return placeholderContent || null
-
+  
+  if (children) return(
+    <ImageBackground
+      source={{
+        ...source,
+        uri: imgUri
+      }}
+      placeholderContent={placeHolderContent}
+      {...rest}
+    >
+      {children}
+    </ImageBackground>
+  )
   return (
     <Image
-      // eslint-disable-next-line react/jsx-props-no-spreading
-      {...props}
       source={{
         ...source,
         uri: imgUri,
       }}
+      placeholderContent={placeHolderContent}
+      {...rest}
     />
   )
-}
-
-CachedImage.propTypes = {
-  source: PropTypes.object.isRequired,
-  cacheKey: PropTypes.string.isRequired,
 }
 
 export const CacheManager = {
   addToCache: async ({ file, key }) => {
     await FileSystem.copyAsync({
       from: file,
-      to: `${CONST.IMAGE_CACHE_FOLDER}${key}`,
+      to: `${IMAGE_CACHE_FOLDER}${key}`,
     })
     // const uri = await FileSystem.getContentUriAsync(`${CONST.IMAGE_CACHE_FOLDER}${key}`)
     // return uri
@@ -102,7 +118,7 @@ export const CacheManager = {
 
   getCachedUri: async ({ key }) => {
     const uri = await FileSystem.getContentUriAsync(
-      `${CONST.IMAGE_CACHE_FOLDER}${key}`,
+      `${IMAGE_CACHE_FOLDER}${key}`,
     )
     return uri
   },
@@ -110,7 +126,7 @@ export const CacheManager = {
   downloadAsync: async ({ uri, key, options }) => {
     return await FileSystem.downloadAsync(
       uri,
-      `${CONST.IMAGE_CACHE_FOLDER}${key}`,
+      `${IMAGE_CACHE_FOLDER}${key}`,
       options,
     )
   },
