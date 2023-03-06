@@ -1,18 +1,18 @@
-# expo-cached-image
-Super fast cached image component for react-native applications built with expo
+# expo-cached-media
+Super fast cached media component for react-native applications built with expo
 
 ## Usage
 ### Add to project
 ```
-yarn add expo-cached-image
+yarn add expo-cached-media
 ```
 or
 ```
-expo install expo-cached-image
+expo install expo-cached-media
 ```
 ### CachedImage
 ```JavaScript
-import CachedImage from 'expo-cached-image'
+import CachedImage from 'expo-cached-media'
 ```
 
 Then it can be referenced in code like this:
@@ -43,9 +43,9 @@ Then it can be referenced in code like this:
         />
 ```        
 
-`<CachedImage/>` internally uses the `<Image/>` component from *'react-native'*, so any properties that apply to the `<Image/>` can be passed into the `<CachedImage/>`.
+`<CachedImage />` and `<CachedImageBackground />` internally uses the `<Image />` and `<ImageBackground />` components from *'react-native'* , so any properties that apply to the `<Image/>` can be passed into the `<CachedImage/>`.
 
-*cacheKey* is the only property that's `<CachedImage/>` specific. The same *cacheKey* value should always be passed for the same *source* value. This is a little bit of an extra work from application development point of view, but this is how `<CachedImage/>` achieves it's performance. If not for *cacheKey*, the component would have to use some Crypto hash, which would add computational overhead. If you are rendering lots of images in a list on a screen -- this component will achieve the best performance.
+*cacheKey* is the only property that's `<CachedImage />`/`<CachedBackgroundImage />` specific. The same *cacheKey* value should always be passed for the same *source* value. This is a little bit of an extra work from application development point of view, but this is how `expo-cached-medi`a achieves its performance. If not for *cacheKey*, the component would have to use some Crypto hash, which would add computational overhead. If you are rendering lots of images in a list on a screen -- this component will achieve the best performance.
 
 ### CacheManager
 ```JavaScript
@@ -70,9 +70,3 @@ To pre-populate the cache ahead of time from remote URI:
 // this is a convinience wrapper for https://docs.expo.dev/versions/latest/sdk/filesystem/#filesystemdownloadasyncuri-fileuri-options
   await CacheManager.downloadAsync({uri: `${item.url}`, key: `${item.id}`})
 ```
-
-
-## Sample projects
-https://github.com/echowaves/WiSaw
-
-https://www.wisaw.com/
