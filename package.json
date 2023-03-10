@@ -1,6 +1,6 @@
 {
   "name": "expo-cached-media",
-  "version": "47.1.6",
+  "version": "47.1.7",
   "description": "Super fast cached media component for react-native applications powered by expo",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -37,7 +37,7 @@
   "bugs": {
     "url": "https://github.com/ScienceArtMagic/expo-cached-media/issues"
   },
-  "homepage": "https://github.com/echowaves/expo-cached-media#readme",
+  "homepage": "https://github.com/ScienceArtMagic/expo-cached-media#readme",
   "peerDependencies": {
     "expo-file-system": "^15.2.2",
     "react": ">=18.1.0",
