@@ -2,13 +2,23 @@
   "name": "expo-cached-media",
   "version": "47.1.6",
   "description": "Super fast cached media component for react-native applications powered by expo",
-  "main": "lib/index.js",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
+  "react-native": "lib/module/index",
+  "types": "lib/typescript/index",
   "files": [
     "lib"
   ],
   "scripts": {
-    "prepublish": "echo 'prepublishing' && rm -rf ./lib && babel src --out-dir lib && yarn link",
-    "test": "rm -rf ./lib && jest"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "typecheck": "tsc --skipLibCheck --noEmit",
+    "build": "bob build",
+    "lint": "eslint --ext .ts,.js,.tsx,.jsx ."
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "repository": {
     "type": "git",
@@ -29,29 +39,50 @@
   },
   "homepage": "https://github.com/echowaves/expo-cached-media#readme",
   "peerDependencies": {
-    "expo-file-system": "^15.0.0",
-    "react": "^18.1.0",
-    "react-native": "^0.70.5"
+    "expo-file-system": "^15.2.2",
+    "react": ">=18.1.0",
+    "react-native": ">=0.70.5",
+    "react-native-web": ">=0.18.7"
   },
   "devDependencies": {
-    "@babel/cli": "^7.19.3",
-    "@babel/core": "^7.20.2",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/preset-env": "^7.20.2",
     "@react-native-community/eslint-config": "^3.2.0",
-    "babel-eslint": "^10.1.0",
-    "babel-jest": "28.1.3",
+    "@types/react": "^18.0.28",
+    "@types/react-native": "^0.70.11",
+    "@typescript-eslint/eslint-plugin": "^3.10.1",
+    "@typescript-eslint/parser": "^3.10.1",
+    "babel-plugin-module-resolver": "^4.1.0",
     "babel-preset-expo": "9.2.0",
-    "eslint": "8.21.0",
-    "eslint-config-airbnb": "19.0.4",
-    "eslint-config-prettier": "8.5.0",
+    "eslint": "8.35.0",
+    "eslint-config-prettier": "8.6.0",
     "eslint-plugin-import": "2.26.0",
     "eslint-plugin-jest": "26.8.2",
     "eslint-plugin-jsx-a11y": "6.6.1",
-    "eslint-plugin-react": "7.30.1",
-    "eslint-plugin-react-hooks": "4.6.0",
-    "eslint-plugin-react-native": "4.0.0",
-    "jest": "28.1.3",
-    "metro-react-native-babel-preset": "0.72.0"
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-native": "^4.0.0",
+    "expo-file-system": "^15.2.2",
+    "husky": "^4.3.8",
+    "jest": "^28.1.3",
+    "prettier": "^2.8.4",
+    "pretty-quick": "^3.1.3",
+    "react": ">=18.1.0",
+    "react-dom": ">=18.1.0",
+    "react-native": ">=0.70.5",
+    "react-native-builder-bob": "^0.20.4",
+    "react-native-web": ">=0.18.12",
+    "typescript": "^4.9.5"
+  },
+  "react-native-builder-bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      [
+        "commonjs",
+        {
+          "configFile": "./babel.config.js"
+        }
+      ],
+      "module",
+      "typescript"
+    ]
   }
 }

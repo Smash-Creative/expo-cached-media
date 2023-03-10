@@ -1,4 +1,4 @@
 node_modules/**/*
-/lib
+/src
 .DS_Store
 /.vscode
