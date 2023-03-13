@@ -16,7 +16,27 @@ or
 expo install expo-cached-media expo-file-system
 ```
 
-### CachedImage
+### Components
+
+#### Shared Props
+
+``` TypeScript
+interface CachedMediaURISource {
+  uri: string
+  headers?: { [key: string]: string }
+  expiresIn?: number
+}
+
+export interface CachedMediaProps {
+  source: CachedMediaURISource
+  cacheKey?: string
+  placeholderContent?: React.ReactElement
+  children?: React.ReactNode
+  rest?: { [key: string]: any }
+}
+```
+
+#### `CachedImage<CachedMediaProps & (ImageProps | ImageBackgroundProps)>`
 
 ```JavaScript
 import CachedImage from 'expo-cached-media'
@@ -51,20 +71,26 @@ Then it can be referenced in code like this:
 />
 ```
 
-`<CachedImage />` internally uses the `<Image />` and `<ImageBackground />` components from *'react-native'* (`<Image />` if child components are NOT specified, `<ImageBackground />` if children ARE present), so any properties that apply to the `<Image/>`/`<ImageBackground />` can be passed into the `<CachedImage/>`.
+`<CachedImage />` internally uses the `<Image />` and `<ImageBackground />` components from *'react-native'* (`<Image />` if children are NOT specified, `<ImageBackground />` if children ARE), so any properties that apply to the `<Image/>`/`<ImageBackground />` can be passed into the `<CachedImage/>`.
 
 *cacheKey* is the only property that's `<CachedImage />` specific. The same *cacheKey* value should always be passed for the same *source* value. This is a little bit of extra work from an application development point of view (if you choose not to use the default, which gets the filename from the remote URI), but this is how `expo-cached-media` achieves its performance. If not for *cacheKey*, the component would have to use some Crypto hash, which would add computational overhead. If you are rendering lots of images in a list on a screen -- this component will achieve the best performance.
 
+### `CachedVideo<CachedMediaProps & VideoProps>`
+
+Similar to `CachedImage`, but returns the `Video` component from expo-av (instead of `Image` or `ImageBackground` from react-native). In fact, they're both created by the same internal `createCachedMediaElement` function.
+
 ### CacheManager
 
+Still the same methods as the `CacheManager` object in `expo-cached-image`, but `addToCache` has been renamed to `addToCacheAsync` and `getCachedUri` to `getCachedUriAsync` (in keeping with Expo conventions for async methods).
+
 ```JavaScript
-import { CacheManager } from 'expo-cached-image'
+import { CacheManager } from 'expo-cached-media'
 ```
 
 If you have an image on the local file system, which you want to add to the cache, do this:
 
 ```JavaScript
-photo.getImgUrl = await CacheManager.addToCache({
+photo.getImgUrl = await CacheManager.addToCacheAsync({
   file: `${CONST.PENDING_UPLOADS_FOLDER}${item}`,
   key: `${photo.id}`,
 })
@@ -73,7 +99,7 @@ photo.getImgUrl = await CacheManager.addToCache({
 To get the *local* URI of the cached file by key:
 
 ```JavaScript
-const uri = await CacheManager.getCachedUri({ key: `${item.id}` })
+const uri = await CacheManager.getCachedUriAsync({ key: `${item.id}` })
 ```
 
 To pre-populate the cache ahead of time from *remote* URI:
