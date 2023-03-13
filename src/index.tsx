@@ -15,6 +15,7 @@ import {
   ImageBackgroundProps,
   ImageComponent,
   ImageProps,
+  StyleSheet,
 } from 'react-native'
 import { Video, VideoProps } from 'expo-av'
 
@@ -34,7 +35,7 @@ export interface CachedMediaProps {
 
 type VideoComponent = typeof Video
 
-export const MEDIA_CACHE_FOLDER = `${FileSystem.cacheDirectory}`
+export const MEDIA_CACHE_FOLDER = `${FileSystem?.cacheDirectory}`
 // export const MEDIA_DOCUMENT_FOLDER = `${FileSystem.documentDirectory}media/`
 
 // const Image = lazy(() => import('./suspense/Image'))
@@ -91,7 +92,10 @@ const CacheManager = {
 }
 
 function createCachedMediaElement<T>(name: 'CachedImage' | 'CachedVideo') {
-  const CachedMediaElement = forwardRef<T, CachedMediaProps>((props, ref) => {
+  const CachedMediaElement = forwardRef<
+    T,
+    CachedMediaProps & (ImageProps | ImageBackgroundProps | VideoProps)
+  >((props, ref) => {
     const {
       source,
       cacheKey = getFileNameFromUri(source.uri),
@@ -99,8 +103,9 @@ function createCachedMediaElement<T>(name: 'CachedImage' | 'CachedVideo') {
       children,
       rest,
     } = props
-    const { uri, headers, expiresIn } = source
+    const { uri, headers, expiresIn }: CachedMediaURISource = source
     const fileUri = `${MEDIA_CACHE_FOLDER}${cacheKey}`
+    console.log(fileUri)
     const _callback = (downloadProgress?: FileSystem.DownloadProgressData) => {
       if (componentIsMounted.current === false) {
         downloadResumableRef.current.pauseAsync()
@@ -151,7 +156,7 @@ function createCachedMediaElement<T>(name: 'CachedImage' | 'CachedVideo') {
             setMediaUri(null)
 
             const response = await downloadResumableRef.current.downloadAsync()
-            if (componentIsMounted.current && response?.status === 200) {
+            if (response?.status === 200) {
               setMediaUri(`${fileUri}?`) // deep clone to force re-render
             }
             if (response?.status !== 200) {
@@ -164,49 +169,48 @@ function createCachedMediaElement<T>(name: 'CachedImage' | 'CachedVideo') {
       }
     }
 
-    const MediaComponent = (
-      props: Omit<CachedMediaProps, 'cacheKey'> &
-        (ImageProps | ImageBackgroundProps | VideoProps),
-    ) => {
-      if (name === 'CachedVideo') {
-        return (
-          <Video
-            {...props}
-            // @ts-expect-error TS + forwardRef = 💩
-            ref={ref as React.ForwardedRef<VideoComponent>}
-          />
-        )
-      }
-      if (name === 'CachedImage' && children) {
-        return (
-          <ImageBackground
-            {...props}
-            // @ts-expect-error TS + forwardRef = 💩
-            ref={ref as React.ForwardedRef<ImageBackgroundComponent>}
-          />
-        )
-      }
+    if (!mediaUri) return placeholderContent
+
+    if (name === 'CachedVideo') {
       return (
-        <Image
-          {...props}
-          // @ts-expect-error TS + forwardRef = 💩
-          ref={ref as React.ForwardedRef<ImageComponent>}
+        <Video
+          {...(props as VideoProps)}
+          source={{
+            ...source,
+            uri: mediaUri,
+          }}
+          style={[styles.flexFill, props?.style]}
+          videoStyle={[{ width: '100%', height: '100%' }, rest?.videoStyle]}
+          ref={ref as React.ForwardedRef<Video>}
         />
       )
     }
-
-    if (!mediaUri) return placeholderContent
-
+    if (name === 'CachedImage' && children) {
+      return (
+        <ImageBackground
+          {...(props as ImageBackgroundProps)}
+          source={{
+            ...source,
+            uri: mediaUri,
+          }}
+          style={[styles.flexFill, props.style]}
+          imageStyle={[{ width: '100%', height: '100%' }, rest?.imageStyle]}
+          ref={ref as React.ForwardedRef<ImageBackground>}
+        >
+          {children}
+        </ImageBackground>
+      )
+    }
     return (
-      <MediaComponent
+      <Image
+        {...(props as ImageProps)}
         source={{
           ...source,
           uri: mediaUri,
         }}
-        {...rest}
-      >
-        {children}
-      </MediaComponent>
+        style={[styles.flexFill, rest?.style]}
+        ref={ref as React.ForwardedRef<Image>}
+      />
     )
   })
 
@@ -221,3 +225,11 @@ const CachedImage = createCachedMediaElement<
 const CachedVideo = createCachedMediaElement<VideoComponent>('CachedVideo')
 
 export { CacheManager, CachedImage, CachedVideo }
+
+const styles = StyleSheet.create({
+  flexFill: {
+    flex: 1,
+    width: '100%',
+    height: '100%',
+  },
+})
