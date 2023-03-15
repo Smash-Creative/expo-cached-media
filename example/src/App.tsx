@@ -3,6 +3,12 @@ import * as React from 'react';
 import { StyleSheet, View, Text } from 'react-native'
 import { CacheManager, CachedImage, CachedVideo } from 'expo-cached-media'
 
+const Placeholder = () => (
+  <View style={styles.container}>
+    <Text style={styles.text}>Placeholder</Text>
+  </View>
+)
+
 export default function App() {
   const video = React.useRef(null)
   return (
@@ -10,9 +16,9 @@ export default function App() {
       <CachedVideo
         ref={video}
         source={{
-          uri: 'https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/1080/Big_Buck_Bunny_1080_10s_1MB.mp4',
+          uri: 'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_10mb.mp4',
         }}
-        placeholderContent={<Text>Placeholder</Text>}
+        placeholderContent={<Placeholder />}
         shouldPlay
         isLooping
         // useNativeControls
@@ -20,10 +26,11 @@ export default function App() {
       />
       <CachedImage
         source={{
-          uri: 'https://test-videos.co.uk/user/pages/images/big_buck_bunny.jpg',
+          uri: 'https://sample-videos.com/img/Sample-jpg-image-500kb.jpg',
         }}
-        placeholderContent={<Text>Placeholder</Text>}
+        placeholderContent={<Placeholder />}
         resizeMode="cover"
+        style={{ alignItems: 'center', justifyContent: 'center' }}
       >
         <Text style={styles.text}>ImageBackground</Text>
       </CachedImage>
@@ -38,14 +45,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  box: {
-    // flex: 1,
-    // width: '100%',
-    // height: 'auto',
-    // height: 60,
-    // marginVertical: 20,
-  },
   text: {
     alignSelf: 'center',
+    backgroundColor: '#fff',
   },
 })
