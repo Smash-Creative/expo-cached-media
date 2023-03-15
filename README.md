@@ -4,16 +4,16 @@ Super fast cached media component for react-native applications built with expo
 
 ## Usage
 
-### Add to project (with `expo-file-system` peer dependency)
+### Add to project (with `expo-file-system` and `expo-av` peer dependencies)
 
 ```sh
-yarn add expo-cached-media expo-file-system
+yarn add expo-cached-media expo-file-system expo-av
 ```
 
 or
 
 ```sh
-expo install expo-cached-media expo-file-system
+expo install expo-cached-media expo-file-system expo-av
 ```
 
 ### Components
