@@ -5,6 +5,7 @@ import {
   // CacheManager,
   CachedImage,
   CachedVideo,
+  getProgressPercent,
 } from 'expo-cached-media'
 
 const Placeholder = ({
@@ -15,7 +16,7 @@ const Placeholder = ({
     <View style={styles.container}>
       <Text style={styles.text}>
         {(totalBytesWritten
-          ? ((totalBytesWritten / totalBytesExpectedToWrite) * 100).toFixed(0)
+          ? getProgressPercent(totalBytesWritten, totalBytesExpectedToWrite)
           : 0) + '%'}
       </Text>
     </View>
