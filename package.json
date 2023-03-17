@@ -1,6 +1,6 @@
 {
   "name": "expo-cached-media",
-  "version": "47.2.1",
+  "version": "47.3.0",
   "description": "Super fast cached media component for react-native applications powered by expo",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
