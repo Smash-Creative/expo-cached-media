@@ -1,17 +1,11 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  plugins: [
-    'react-hooks',
-    'react-native',
-    'eslint-plugin-universe',
-    'jsx-a11y',
-  ],
+  plugins: ['react-hooks', 'react-native', 'jsx-a11y'],
   extends: [
     'plugin:jsx-a11y/recommended',
-    '@react-native-community',
+    'universe',
     'plugin:@typescript-eslint/recommended',
     'prettier',
-    'prettier/@typescript-eslint',
   ],
   rules: {
     'react-hooks/rules-of-hooks': 2,

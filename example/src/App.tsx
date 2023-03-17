@@ -1,7 +1,11 @@
 import * as React from 'react';
 import type { DownloadProgressData } from 'expo-file-system'
 import { StyleSheet, View, Text } from 'react-native'
-import { CacheManager, CachedImage, CachedVideo } from 'expo-cached-media'
+import {
+  // CacheManager,
+  CachedImage,
+  CachedVideo,
+} from 'expo-cached-media'
 
 const Placeholder = ({
   totalBytesWritten,
