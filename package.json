@@ -15,7 +15,7 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint \"**/*.{js,jsx,ts,tsx}\"",
     "prepack": "bob build",
-    "release": "release-it",
+    "release": "yarn prepack && release-it",
     "example": "yarn --cwd example",
     "bootstrap": "yarn example && yarn"
   },
@@ -98,7 +98,7 @@
   },
   "release-it": {
     "git": {
-      "commitMessage": "chore: release ${version}",
+      "commitMessage": "chore: 🔖 release ${version}",
       "tagName": "v${version}"
     },
     "npm": {
