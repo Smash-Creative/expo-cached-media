@@ -45,6 +45,15 @@ export const MEDIA_CACHE_FOLDER = `${FileSystem?.cacheDirectory}`
 // const ImageBackground = lazy(() => import('./suspense/ImageBackground'))
 // const Video = lazy(() => import('./suspense/Video'))
 
+export const getProgressPercent = (
+  totalBytesWritten: number,
+  totalBytesExpectedToWrite: number,
+  decimalPlace: number = 0, // output percentage without decimal by default
+) => {
+  const rawPercentage = (totalBytesWritten / totalBytesExpectedToWrite) * 100
+  return Number(rawPercentage.toFixed(decimalPlace))
+}
+
 const getFileNameFromUri = (uri: string) => {
   return uri
     .substring(uri.lastIndexOf('/') + 1)
@@ -124,13 +133,6 @@ function createCachedMediaElement<T>(name: 'CachedImage' | 'CachedVideo') {
 
       progress.current = downloadProgress
       updateProgress(downloadProgress)
-      console.log(
-        (
-          (progress.current.totalBytesWritten /
-            progress.current.totalBytesExpectedToWrite) *
-          100
-        ).toFixed(0) + '%',
-      )
     }
 
     const [mediaUri, setMediaUri] = useState<string | null>(fileUri)
