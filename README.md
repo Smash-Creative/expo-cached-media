@@ -1,6 +1,6 @@
 # expo-cached-media
 
-Super fast cached media component for react-native applications built with expo
+Super fast cached media components (combined Image/ImageBackground, as well as Video) for React Native applications powered by Expo.
 
 ## Usage
 
