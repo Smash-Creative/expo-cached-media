@@ -7,7 +7,6 @@ import React, {
   // lazy,
 } from 'react'
 import * as FileSystem from 'expo-file-system'
-// import { getFileNameFromUri } from './utils'
 import {
   Image,
   ImageBackground,
@@ -16,6 +15,7 @@ import {
   ImageComponent,
   ImageProps,
   StyleSheet,
+  View,
 } from 'react-native'
 import { Video, VideoProps } from 'expo-av'
 
@@ -28,7 +28,10 @@ interface CachedMediaURISource {
 export interface CachedMediaProps {
   source: CachedMediaURISource
   cacheKey?: string
-  placeholderContent?: React.ReactElement
+  placeholderContent?: ({
+    totalBytesWritten,
+    totalBytesExpectedToWrite,
+  }: FileSystem.DownloadProgressData) => React.ReactElement
   children?: React.ReactNode
   rest?: { [key: string]: any }
 }
@@ -62,7 +65,7 @@ const CacheManager = {
       to: `${MEDIA_CACHE_FOLDER}${key}`,
     })
     // const uri = await FileSystem.getContentUriAsync(`${CONST.IMAGE_CACHE_FOLDER}${key}`)
-    // return uri
+
     const uri = await CacheManager.getCachedUriAsync({ key })
     return uri
   },
@@ -96,22 +99,38 @@ function createCachedMediaElement<T>(name: 'CachedImage' | 'CachedVideo') {
     T,
     CachedMediaProps & (ImageProps | ImageBackgroundProps | VideoProps)
   >((props, ref) => {
+    const progress = useRef<FileSystem.DownloadProgressData>({
+      totalBytesWritten: 0,
+      totalBytesExpectedToWrite: 1000,
+    })
+    const [{ totalBytesWritten, totalBytesExpectedToWrite }, updateProgress] =
+      useState<FileSystem.DownloadProgressData>(progress.current)
+
     const {
       source,
       cacheKey = getFileNameFromUri(source.uri),
-      placeholderContent = <></>,
+      placeholderContent = () => <View style={styles.flexFill} />,
       children,
       rest,
     } = props
     const { uri, headers, expiresIn }: CachedMediaURISource = source
     const fileUri = `${MEDIA_CACHE_FOLDER}${cacheKey}`
-    console.log(fileUri)
-    const _callback = (downloadProgress?: FileSystem.DownloadProgressData) => {
+
+    const _callback = (downloadProgress: FileSystem.DownloadProgressData) => {
       if (componentIsMounted.current === false) {
         downloadResumableRef.current.pauseAsync()
         FileSystem.deleteAsync(fileUri, { idempotent: true }) // delete file locally if it was not downloaded properly
       }
-      return downloadProgress
+
+      progress.current = downloadProgress
+      updateProgress(downloadProgress)
+      console.log(
+        (
+          (progress.current.totalBytesWritten /
+            progress.current.totalBytesExpectedToWrite) *
+          100
+        ).toFixed(0) + '%',
+      )
     }
 
     const [mediaUri, setMediaUri] = useState<string | null>(fileUri)
@@ -169,7 +188,11 @@ function createCachedMediaElement<T>(name: 'CachedImage' | 'CachedVideo') {
       }
     }
 
-    if (!mediaUri) return placeholderContent
+    if (!mediaUri)
+      return (
+        placeholderContent({ totalBytesWritten, totalBytesExpectedToWrite }) ||
+        null
+      )
 
     if (name === 'CachedVideo') {
       return (
@@ -231,5 +254,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 })
