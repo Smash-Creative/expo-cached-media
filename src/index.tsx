@@ -1,3 +1,5 @@
+import { Video, VideoProps } from 'expo-av'
+import * as FileSystem from 'expo-file-system'
 import React, {
   useEffect,
   useState,
@@ -6,7 +8,6 @@ import React, {
   forwardRef,
   // lazy,
 } from 'react'
-import * as FileSystem from 'expo-file-system'
 import {
   Image,
   ImageBackground,
@@ -17,7 +18,6 @@ import {
   StyleSheet,
   View,
 } from 'react-native'
-import { Video, VideoProps } from 'expo-av'
 
 interface CachedMediaURISource {
   uri: string
@@ -48,13 +48,13 @@ export const MEDIA_CACHE_FOLDER = `${FileSystem?.cacheDirectory}`
 export const getProgressPercent = (
   totalBytesWritten: number,
   totalBytesExpectedToWrite: number,
-  decimalPlace: number = 0, // output percentage without decimal by default
+  decimalPlace = 0, // output percentage without decimal by default
 ) => {
   const rawPercentage = (totalBytesWritten / totalBytesExpectedToWrite) * 100
   return Number(rawPercentage.toFixed(decimalPlace))
 }
 
-const getFileNameFromUri = (uri: string) => {
+export const getFileNameFromUri = (uri: string) => {
   return uri
     .substring(uri.lastIndexOf('/') + 1)
     .split('?')[0]
@@ -186,7 +186,7 @@ function createCachedMediaElement<T>(name: 'CachedImage' | 'CachedVideo') {
           }
         }
       } catch (err) {
-        // console.log({ err })
+        console.log({ err })
       }
     }
 
