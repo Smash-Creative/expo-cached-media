@@ -20,14 +20,14 @@ expo install expo-cached-media expo-file-system expo-av
 
 #### Shared Props
 
-``` TypeScript
+``` JavaScript
 interface CachedMediaURISource {
   uri: string
   headers?: { [key: string]: string }
   expiresIn?: number
 }
 
-export interface CachedMediaProps {
+interface CachedMediaProps {
   source: CachedMediaURISource
   cacheKey?: string
   placeholderContent?: React.ReactElement
@@ -75,7 +75,7 @@ Then it can be referenced in code like this:
 
 *cacheKey* is the only property that's `<CachedImage />` specific. The same *cacheKey* value should always be passed for the same *source* value. This is a little bit of extra work from an application development point of view (if you choose not to use the default, which gets the filename from the remote URI), but this is how `expo-cached-media` achieves its performance. If not for *cacheKey*, the component would have to use some Crypto hash, which would add computational overhead. If you are rendering lots of images in a list on a screen -- this component will achieve the best performance.
 
-### `CachedVideo<CachedMediaProps & VideoProps>`
+#### `CachedVideo<CachedMediaProps & VideoProps>`
 
 Similar to `CachedImage`, but returns the `Video` component from expo-av (instead of `Image` or `ImageBackground` from react-native). In fact, they're both created by the same internal `createCachedMediaElement` function.
 
@@ -111,3 +111,23 @@ await CacheManager.downloadAsync({
   key: `${item.id}`
 })
 ```
+
+### Utility functions
+
+``` JavaScript
+getProgressPercent(
+  totalBytesWritten: number, // size of file (in bytes) currently downloaded
+  totalBytesExpectedToWrite: number,// total size of file (in bytes) to download
+  decimalPlace?: number // how many digits to display on the right side of the decimal (default 0)
+) => number
+```
+
+`getProgressPercent()` divides `totalBytesWritten` by `totalBytesExpectedToWrite` and returns a number between 0 and 100 (integers by default, but you can optionally return fractional amounts by specifying `decimalPlace` with an integer greater than 0)
+
+``` JavaScript
+getFileNameFromUri(uri: string)
+```
+
+`getFileNameFromUri()` takes a remote image or video URI (e.g. `https://website.com/path/to/video.mp4#hash?query=string`) and strips the remote address (protocol and path, e.g. `https://website.com/path/to`) from the front, as well as any hashes (e.g. `#hash`) and query strings (e.g. `?query=string`) at the end of the address, returning the file name (e.g. `video.mp4`).
+
+This is used internally to provide the default `key` prop value for the `<CachedImage />` and `<CachedVideo />` components.
