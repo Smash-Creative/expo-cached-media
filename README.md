@@ -77,6 +77,10 @@ Then it can be referenced in code like this:
 
 #### `CachedVideo<CachedMediaProps & VideoProps>`
 
+```JavaScript
+import { CachedVideo } from 'expo-cached-media'
+```
+
 Similar to `CachedImage`, but returns the `Video` component from expo-av (instead of `Image` or `ImageBackground` from react-native). In fact, they're both created by the same internal `createCachedMediaElement()` function.
 
 ### CacheManager
@@ -113,6 +117,16 @@ await CacheManager.downloadAsync({
 ```
 
 ### Utility functions
+
+``` JavaScript
+getProgress(
+  totalBytesWritten: number, // size of file (in bytes) currently downloaded
+  totalBytesExpectedToWrite: number,// total size of file (in bytes) to download
+  decimalPlace?: number // how many digits to display on the right side of the decimal (default 3)
+) => number
+```
+
+`getProgress()` divides `totalBytesWritten` by `totalBytesExpectedToWrite` and returns a number between 0 and 1. It has a decimal place of 3 (thousandths) by default, but you can optionally remove fractional amounts by specifying a `decimalPlace` value of 0 (e.g. if you need something to run only once the download is complete)
 
 ``` JavaScript
 getProgressPercent(

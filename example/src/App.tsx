@@ -1,23 +1,26 @@
-import * as React from 'react';
-import type { DownloadProgressData } from 'expo-file-system'
-import { StyleSheet, View, Text } from 'react-native'
 import {
   // CacheManager,
   CachedImage,
   CachedVideo,
   getProgressPercent,
 } from 'expo-cached-media'
+import type { DownloadProgressData } from 'expo-file-system'
+import * as React from 'react';
+import { StyleSheet, View, Text } from 'react-native'
 
 const Placeholder = ({
   totalBytesWritten,
   totalBytesExpectedToWrite,
-}: DownloadProgressData) => {
+  decimalPlace = 2,
+}: DownloadProgressData & { decimalPlace: number }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>
-        {(totalBytesWritten
-          ? getProgressPercent(totalBytesWritten, totalBytesExpectedToWrite)
-          : 0) + '%'}
+        {getProgressPercent(
+          totalBytesWritten,
+          totalBytesExpectedToWrite,
+          decimalPlace,
+        ) + '%'}
       </Text>
     </View>
   )
@@ -30,9 +33,20 @@ export default function App() {
       <CachedVideo
         ref={video}
         source={{
-          uri: 'https://sample-videos.com/video123/mp4/240/big_buck_bunny_240p_20mb.mp4',
+          uri: 'https://sample-videos.com/video123/mp4/240/big_buck_bunny_240p_30mb.mp4',
+          expiresIn: 1,
         }}
-        placeholderContent={Placeholder}
+        placeholderContent={({
+          totalBytesWritten,
+          totalBytesExpectedToWrite,
+        }: // decimalPlace,
+        DownloadProgressData & { decimalPlace: number }) => (
+          <Placeholder
+            totalBytesWritten={totalBytesWritten}
+            totalBytesExpectedToWrite={totalBytesExpectedToWrite}
+            decimalPlace={1}
+          />
+        )}
         shouldPlay
         isLooping
         // useNativeControls

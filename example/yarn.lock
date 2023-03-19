@@ -4418,10 +4418,8 @@ expo-av@~13.0.3:
   resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-13.0.3.tgz#b624757f3c4f8c35ca83d0485bb20b79b2f9e13d"
   integrity sha512-9SpXOjY2MUK+jCIL68EUro/aHBlbZ3B4cY1nRr2aTPfv/dLD3bXRZNTTtSwOgsHbuKO6XwjHgCoYbd9T0GcE4A==
 
-expo-cached-media@^47.2.0:
-  version "47.2.0"
-  resolved "https://registry.yarnpkg.com/expo-cached-media/-/expo-cached-media-47.2.0.tgz#31067ee524688872d900913dd4d35a6f1117b72d"
-  integrity sha512-O1co8iTqRm530uGpRlKJYb180W9/kWEbuK5rLsSixKozkB3OgIcY+QkAfOYyTw+a/A5CJOVFEuMUydwWNwAhuA==
+"expo-cached-media@file:../src":
+  version "0.0.0"
 
 expo-constants@~14.0.0, expo-constants@~14.0.2:
   version "14.0.2"

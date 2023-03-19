@@ -11,7 +11,7 @@
   "dependencies": {
     "expo": "~47.0.13",
     "expo-av": "~13.0.3",
-    "expo-cached-media": "^47.2.0",
+    "expo-cached-media": "file:../src",
     "expo-file-system": "~15.1.1",
     "expo-status-bar": "~1.4.4",
     "react": "18.1.0",

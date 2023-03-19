@@ -45,13 +45,29 @@ export const MEDIA_CACHE_FOLDER = `${FileSystem?.cacheDirectory}`
 // const ImageBackground = lazy(() => import('./suspense/ImageBackground'))
 // const Video = lazy(() => import('./suspense/Video'))
 
+/** @returns Number between 0 and 100, optionally with decimal to the specified decimalPlace */
 export const getProgressPercent = (
   totalBytesWritten: number,
   totalBytesExpectedToWrite: number,
   decimalPlace = 0, // output percentage without decimal by default
 ) => {
-  const rawPercentage = (totalBytesWritten / totalBytesExpectedToWrite) * 100
-  return Number(rawPercentage.toFixed(decimalPlace))
+  const rawPercentage =
+    getProgress(
+      totalBytesWritten,
+      totalBytesExpectedToWrite,
+      3 + decimalPlace,
+    ) * 100
+  return Number(rawPercentage?.toFixed(decimalPlace))
+}
+
+/** @returns Number between 0 and 1, to the specified decimalPlace */
+export const getProgress = (
+  totalBytesWritten: number,
+  totalBytesExpectedToWrite: number,
+  decimalPlace = 3,
+) => {
+  const rawProgress = totalBytesWritten / totalBytesExpectedToWrite
+  return Number(rawProgress?.toFixed(decimalPlace))
 }
 
 export const getFileNameFromUri = (uri: string) => {
@@ -73,7 +89,7 @@ const CacheManager = {
       from: file,
       to: `${MEDIA_CACHE_FOLDER}${key}`,
     })
-    // const uri = await FileSystem.getContentUriAsync(`${CONST.IMAGE_CACHE_FOLDER}${key}`)
+    // const uri = await FileSystem.getContentUriAsync(`${MEDIA_DOCUMENT_FOLDER}${key}`)
 
     const uri = await CacheManager.getCachedUriAsync({ key })
     return uri
@@ -132,7 +148,7 @@ function createCachedMediaElement<T>(name: 'CachedImage' | 'CachedVideo') {
       }
 
       progress.current = downloadProgress
-      updateProgress(downloadProgress)
+      updateProgress(progress.current)
     }
 
     const [mediaUri, setMediaUri] = useState<string | null>(fileUri)
