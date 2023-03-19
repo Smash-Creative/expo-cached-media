@@ -2,9 +2,9 @@
 
 Super fast cached media components (combined Image/ImageBackground, as well as Video) for React Native applications powered by Expo.
 
-## Usage
+## Install
 
-### Add to project (with `expo-file-system` and `expo-av` peer dependencies)
+Add to project (with `expo-file-system` and `expo-av` peer dependencies):
 
 ```sh
 yarn add expo-cached-media expo-file-system expo-av
@@ -16,9 +16,9 @@ or
 expo install expo-cached-media expo-file-system expo-av
 ```
 
-### Components
+## Components
 
-#### Shared Props
+### Shared Props
 
 ``` JavaScript
 interface CachedMediaURISource {
@@ -36,10 +36,10 @@ interface CachedMediaProps {
 }
 ```
 
-#### `CachedImage<CachedMediaProps & (ImageProps | ImageBackgroundProps)>`
+### `CachedImage<CachedMediaProps & (ImageProps | ImageBackgroundProps)>`
 
 ```JavaScript
-import CachedImage from 'expo-cached-media'
+import { CachedImage } from 'expo-cached-media'
 ```
 
 Then it can be referenced in code like this:
@@ -77,7 +77,7 @@ Then it can be referenced in code like this:
 
 #### `CachedVideo<CachedMediaProps & VideoProps>`
 
-Similar to `CachedImage`, but returns the `Video` component from expo-av (instead of `Image` or `ImageBackground` from react-native). In fact, they're both created by the same internal `createCachedMediaElement` function.
+Similar to `CachedImage`, but returns the `Video` component from expo-av (instead of `Image` or `ImageBackground` from react-native). In fact, they're both created by the same internal `createCachedMediaElement()` function.
 
 ### CacheManager
 
